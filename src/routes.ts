@@ -8,26 +8,28 @@ let client: any = algorithmia("simaMBdCR9ijBkR18JRVfbT0BRF1");
 var imageDirectory = client.dir("data://tevonsb/images")
 
 
-router.get("/", async (ctx, next) => {
+router.post("/", async (ctx, next) => {
   try {
     console.log("Recieved request");
     const testFile = __dirname+"/reu.jpg";
     var testHostedFile = "data://tevonsb/images/" + "reu.jpg";
-  //   client.file(testHostedFile).exists(function(exists: Boolean) {
-  //       // Check if file exists, if it doesn't create it
-  //       if (exists == false) {
-  //           console.log(testFile);
-  //           imageDirectory.putFile(testFile, function(response: any) {
-  //               if (response.error) {
-  //                   return console.log("Failed to upload file: " + response.error.message);
-  //               } else {
-  //                 console.log("File uploaded.");
-  //               }
-  //           });
-  //       } else {
-  //           console.log("Your file already exists.")
-  //       }
-  // });
+    console.log(ctx.request);
+    console.log(ctx.request.body.image);
+    client.file(testHostedFile).exists(function(exists: Boolean) {
+        // Check if file exists, if it doesn't create it
+        if (exists == false) {
+            console.log(testFile);
+            imageDirectory.putFile(testFile, function(response: any) {
+                if (response.error) {
+                    return console.log("Failed to upload file: " + response.error.message);
+                } else {
+                  console.log("File uploaded.");
+                }
+            });
+        } else {
+            console.log("Your file already exists.")
+        }
+  });
 
 var input = {
   "images": [

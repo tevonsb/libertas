@@ -7,7 +7,7 @@ const app = new Koa();
 const PORT = process.env.PORT || '8000';
 
 app
-  .use(bodyParser())
+  .use(bodyParser({ jsonLimit: '7mb' }))
   .use(async (ctx, next) => {
     //Change for better authentication soon
     // if (ctx.request.body.blinkerSecret !== process.env.BLINKER_SECRET) {

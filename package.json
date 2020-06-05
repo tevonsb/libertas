@@ -1,0 +1,27 @@
+{
+  "name": "libertas",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/tevonsb/libertas.git",
+  "license": "MIT",
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.11.3",
+    "@types/node": "^14.0.11",
+    "nodemon": "^2.0.4",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.5"
+  },
+  "dependencies": {
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa-router": "^7.4.1",
+    "algorithmia": "^0.3.10",
+    "koa": "^2.12.0",
+    "koa-bodyparser": "^4.3.0",
+    "koa-router": "^9.0.1"
+  }
+}

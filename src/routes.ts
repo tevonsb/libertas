@@ -54,14 +54,15 @@ client.algo("cv/CensorFace/0.1.3") // timeout is optional
         // Download contents of file as a string
         console.log("Downloading blurred image");
         client.file(resp.output[0]).get(function(err, data) {
+            typeof(data);
             console.log("getting image to download");
             if (err) {
                 console.log("Failed to download file.");
                 console.log(err);
             } else {
                 console.log("Successfully downloaded data.")
-                console.log(data);
                 fs.writeFileSync(__dirname+"reu_test.png", data);
+                ctx.body = { image: data.toString('base64') }
             }
         });
     }

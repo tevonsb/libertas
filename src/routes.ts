@@ -2,7 +2,9 @@ import Router from "koa-router";
 const router = new Router();
 
 import algorithmia from "algorithmia"
+import shortid from "shortid";
 import fs from "fs";
+const fsPromises = fs.promises;
 let client: any = algorithmia("simaMBdCR9ijBkR18JRVfbT0BRF1");
 
 var imageDirectory = client.dir("data://tevonsb/images")
@@ -11,15 +13,19 @@ var imageDirectory = client.dir("data://tevonsb/images")
 router.post("/", async (ctx, next) => {
   try {
     console.log("Recieved request");
-    const testFile = __dirname+"/reu.jpg";
-    var testHostedFile = "data://tevonsb/images/" + "reu.jpg";
-    console.log(ctx.request);
-    console.log(ctx.request.body.image);
-    client.file(testHostedFile).exists(function(exists: Boolean) {
+    // const testFile = +"/reu.jpg";
+
+    var base64Data = ctx.request.body.image.replace(/^data:image\/png;base64,/, "");
+    const id = shortid.generate();
+    const hostedFile = `data://tevonsb/images/${id}`;
+    const fileName = `${__dirname}/${id}.png`;
+
+    await fsPromises.writeFile(fileName, base64Data, 'base64');
+
+    client.file(hostedFile).exists(function(exists: Boolean) {
         // Check if file exists, if it doesn't create it
         if (exists == false) {
-            console.log(testFile);
-            imageDirectory.putFile(testFile, function(response: any) {
+            imageDirectory.putFile(fileName, function(response: any) {
                 if (response.error) {
                     return console.log("Failed to upload file: " + response.error.message);
                 } else {
@@ -33,7 +39,7 @@ router.post("/", async (ctx, next) => {
 
 var input = {
   "images": [
-    testHostedFile
+    hostedFile
   ]
 };
 client.algo("cv/CensorFace/0.1.3") // timeout is optional
@@ -58,7 +64,6 @@ client.algo("cv/CensorFace/0.1.3") // timeout is optional
                 fs.writeFileSync(__dirname+"reu_test.png", data);
             }
         });
-        console.log(client.file(resp.output[0]));
     }
 });
   });
